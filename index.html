@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Memorama 3D de la Preparatoria No.62</title>
+ 
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+ 
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+/* Fondo con degradado de azul a verde */
+background: linear-gradient(135deg, #347fe2 0%, #36f770 100%);
+overflow:hidden;
+}
+ 
+.ui{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+z-index:100;
+text-align:center;
+pointer-events:none;
+color:white;
+}
+
+
+.instructions {
+background: rgba(0, 0, 0, 0.7);
+padding: 15px 20px;   /* Más espacio interno */
+font-size: 22px;      /* Letra mucho más grande (antes 14px) */
+line-height: 1.4;     /* Mejor espacio entre líneas */
+border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+margin-bottom: 20px;
+font-weight: 500;     /* Un poco más de grosor */
+}
+ 
+.stats{
+display: inline-block;
+background:rgba(54, 247, 112, 0.3);
+padding:10px 20px;
+border-radius:30px;
+border:1px solid #217ce6;
+font-weight: bold;
+}
+ 
+#victory{
+position:fixed;
+inset:0;
+background:rgba(38, 175, 209, 0.9);
+display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:200;
+color:white;
+}
+ 
+button{
+pointer-events:auto;
+padding:10px 20px;
+background:#62cffa;
+border:none;
+color:white;
+font-weight:bold;
+border-radius:5px;
+cursor:pointer;
+}
+</style>
+</head>
+ 
+<body>
+ 
+<div class="ui">
+<div class="instructions">
+💡 <strong>Instrucciones:</strong> Mueve tu celular / Dispositivo y deja el cursor morado sobre una tarjeta durante 1 segundo para voltearla.
+</div>
+<div class="stats">
+Pares: <span id="pairs">0</span>/8 |
+Movimientos: <span id="moves">0</span>
+</div>
+</div>
+ 
+<div id="victory">
+<h1>ERES UN EXELENTE JAGUAR!! 🐆</h1>
+<button onclick="location.reload()">Jugar de Nuevo</button>
+</div>
+ 
+<a-scene>
+ 
+<a-assets timeout="10000">
+ 
+<img id="img1" crossorigin="anonymous" src="https://scontent.fmex10-4.fna.fbcdn.net/v/t39.30808-6/491754096_1119639510178718_8178765407590151305_n.jpg?stp=cp6_dst-jpg_tt6&cstp=mx2048x1536&ctp=s2048x1536&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=KG_lQYuO9gUQ7kNvwEPV2oa&_nc_oc=Adp4U9288aBcZUwGLNmBI_ujQZC-rcGR6tuVhLxM0koH3WmItX8Aib8WzwBr85sqy2fnv5-C6yDMdd_xGz2Ob3hI&_nc_zt=23&_nc_ht=scontent.fmex10-4.fna&_nc_gid=yMuqIQX2DlYJZ8NnNMrcBw&_nc_ss=7d2a8&oh=00_Af_yWb9RggBtfFZEPgiw8Lm-z3FR5qLwSm2B1qDPgjFDdg&oe=6A41F819">
+<img id="img2" crossorigin="anonymous" src="https://scontent.fmex10-7.fna.fbcdn.net/v/t39.30808-6/720138802_1473895971419735_3377126010559608567_n.jpg?stp=dst-jpg_tt6&cstp=mx1117x944&ctp=s1117x944&_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=O9wPJSaYgRcQ7kNvwFwfx_f&_nc_oc=AdpP5QoMttis1n9BtdQQjgbZcO0Fr5VsjFLPD5Ctmz3N1p0JadxZpqeWPk9LEIyw2aB9FxWTvTYVDkb7gDdV4B4n&_nc_zt=23&_nc_ht=scontent.fmex10-7.fna&_nc_gid=p7AoOZye4-fNSpq6CVVHvw&_nc_ss=7d2a8&oh=00_Af8v4hl9rkrlxmoPHBMBtst9SgaItNSkLY4lWVTtooSmNQ&oe=6A4216CF">
+<img id="img3" crossorigin="anonymous" src="https://scontent.fmex10-2.fna.fbcdn.net/v/t39.30808-6/491908151_1121309536678382_6092215071261341438_n.jpg?stp=c256.0.1536.1536a_cp6_dst-jpg_tt6&cstp=mx1536x1536&ctp=s206x206&_nc_cat=103&ccb=1-7&_nc_sid=50ad20&_nc_ohc=kXjXSHkWp_8Q7kNvwF63jB_&_nc_oc=AdooZJKB3OIiXijjSuF0XQY_HmZh1qhtQ3Bl2tb9pUbUOXL4oIDG_WYrvwEi1glHBzV_ezOdbKV1Ndrou7TISqpB&_nc_zt=23&_nc_ht=scontent.fmex10-2.fna&_nc_gid=Wwu8RZZmEmAINTp6ky2F2w&_nc_ss=7d2a8&oh=00_Af_TSCrBWBlc0RSuuhYzCZHH7TLSfoz2QuWcnqOVL0vSBw&oe=6A430749">
+<img id="img4" crossorigin="anonymous" src="https://scontent.fmex10-7.fna.fbcdn.net/v/t39.30808-6/490801874_1121309546678381_7012312823957419965_n.jpg?stp=cp6_dst-jpg_tt6&cstp=mx2048x1536&ctp=s2048x1536&_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=Eqiqiyo4foEQ7kNvwGr8OS1&_nc_oc=AdqlPzjFbv_rqgypkktmbF8lcAWUOMfZiWVXOWXQevUQbdMEFp4kFyyg67TUaSoQyj7R0krwkxK4EMFnOBkuNJUw&_nc_zt=23&_nc_ht=scontent.fmex10-7.fna&_nc_gid=K9ln_veyWSSGZnOFGwFZgw&_nc_ss=7d2a8&oh=00_Af9z2a1z4ekTj8EziM5j1bPFLba7QnoIC1EHEkWi8dCiMw&oe=6A420A73">
+<img id="img5" crossorigin="anonymous" src="https://scontent.fmex10-2.fna.fbcdn.net/v/t39.30808-6/489692522_1113882070754462_2955208216402633828_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1152&ctp=s2048x1152&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=hdSodju-rmcQ7kNvwFKsVFQ&_nc_oc=AdpKFEyvYUQG0u2f6Q2C4aIiO5vVcFXZNIMCSU6fW7tzErjLP1cekEukM4eliY_SKTnS8WmYYNwfYK85zdT64wq4&_nc_zt=23&_nc_ht=scontent.fmex10-2.fna&_nc_gid=wZOkwOLAciwzcRoiqaTJqA&_nc_ss=7d2a8&oh=00_Af93YNzEDQBU1wKseGbIg2_ezeUxUMbdXcZ1K1gkAgZQ2Q&oe=6A41FCB2">
+<img id="img6" crossorigin="anonymous" src="https://scontent.fmex10-4.fna.fbcdn.net/v/t39.30808-6/491545519_1121309400011729_583570698781837461_n.jpg?stp=cp6_dst-jpg_tt6&cstp=mx1000x750&ctp=s1000x750&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=yZbddF8Lf0cQ7kNvwGm55rC&_nc_oc=AdoQb-cc4PtPPmvkvqGlaRucfQA4TnpJezMCEIDtEmCuwogBoHQTXQ2kOvcAnguIDS2X2-t5Ns7DK11WM2XCEMxw&_nc_zt=23&_nc_ht=scontent.fmex10-4.fna&_nc_gid=4iN_XsZUx9eWFc87p5wekQ&_nc_ss=7d2a8&oh=00_Af8nLDI9u6Td4daa9TfOB528fclheYWbxrpMvmEpXCbu4g&oe=6A41EDD9">
+<img id="img7" crossorigin="anonymous" src="https://scontent.fmex10-2.fna.fbcdn.net/v/t39.30808-6/490052146_1113881814087821_9074538958088445889_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1152&ctp=s2048x1152&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=HcoWfIKDP8IQ7kNvwFG2qNd&_nc_oc=Adr64vHE9g0hZNNWMOQ1ekMSvj-0YIBlIeXfYCQ49fHdLuAXRZpAkC9XTcY_GRiKHvq-8THdAuMKgjEclw_XLNry&_nc_zt=23&_nc_ht=scontent.fmex10-2.fna&_nc_gid=gCMTdyCxFlPHEglu9hrCmQ&_nc_ss=7d2a8&oh=00_Af_jNbnk-NjvYmOrPmYYo-g3BW22C6gI6kt8rUmKxQSUgQ&oe=6A41EB85">
+<img id="img8" crossorigin="anonymous" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaT470N1y-P3_vNXhIVQVutms8OoIY6DpvWg&s">
+</a-assets>
+ 
+<a-entity id="rig" position="0 1.6 3"
+animation="property: position; to: 0 1.6 2; dur: 2000; easing: easeOutQuad">
+ 
+<a-camera
+wasd-controls="acceleration:15"
+look-controls
+raycaster="objects: .clickable">
+ 
+<a-cursor
+geometry="primitive:ring;radiusInner:0.02;radiusOuter:0.035"
+material="color:#bc93fd;shader:flat"
+position="0 0 -1"
+fuse="true"
+fuse-timeout="800"
+animation__fusing="property: scale; startEvents: fusing; dur: 800; from: 1 1 1; to: 0.7 0.7 0.7"
+animation__reset="property: scale; startEvents: mouseleave; dur: 200; to: 1 1 1">
+</a-cursor>
+ 
+</a-camera>
+</a-entity>
+ 
+<a-sky material="transparent: true; opacity: 0;"></a-sky>
+ 
+<a-light type="ambient" intensity="0.7"></a-light>
+<a-light type="point" intensity="1" position="2 4 4"></a-light>
+
+<!-- Fondo oscuro detrás del texto para máxima legibilidad -->
+<a-plane color="#000" opacity="0.4" width="7.5" height="1.1" position="0 6 -4.01"></a-plane>
+
+<a-text value="PREPARATORIA JAGUARES" position="0 6 -4" align="center" color="white" width="11" font="kelsonsans"></a-text>
+
+ 
+<a-entity id="board" position="0 1.5 -4"></a-entity>
+ 
+</a-scene>
+ 
+<script>
+ 
+const board=document.getElementById("board")
+ 
+const icons=[
+"#img1","#img2","#img3","#img4",
+"#img5","#img6","#img7","#img8"
+]
+ 
+let cards=[...icons,...icons]
+ 
+let first=null
+let second=null
+let lock=false
+ 
+let pairs=0
+let moves=0
+ 
+function createBoard(){
+ 
+board.innerHTML=""
+ 
+let shuffled=cards.sort(()=>Math.random()-0.5)
+ 
+shuffled.forEach((img,i)=>{
+ 
+let x=(i%4)*1.4-2.1
+let y=Math.floor(i/4)*1.4-1
+ 
+let cardWrap=document.createElement("a-entity")
+cardWrap.classList.add("clickable")
+cardWrap.setAttribute("position",`${x} ${y} 0`)
+cardWrap.dataset.icon=img
+ 
+let front=document.createElement("a-box")
+front.setAttribute("scale","1.2 1.2 0.1")
+front.setAttribute("color","#2c2c2c")
+ 
+let back=document.createElement("a-plane")
+back.setAttribute("width","1.2")
+back.setAttribute("height","1.2")
+back.setAttribute("position","0 0 -0.06")
+back.setAttribute("rotation","0 180 0")
+back.setAttribute("src",img)
+ 
+cardWrap.appendChild(front)
+cardWrap.appendChild(back)
+ 
+cardWrap.addEventListener("click",()=>flip(cardWrap))
+ 
+board.appendChild(cardWrap)
+ 
+})
+ 
+}
+ 
+function flip(card){
+ 
+if(lock||card.dataset.matched||card===first)return
+ 
+card.setAttribute("animation",
+"property:rotation;to:0 180 0;dur:400")
+ 
+if(!first){
+first=card
+return
+}
+ 
+second=card
+moves++
+document.getElementById("moves").innerText=moves
+ 
+check()
+ 
+}
+ 
+function check(){
+ 
+lock=true
+ 
+if(first.dataset.icon===second.dataset.icon){
+ 
+first.dataset.matched=true
+second.dataset.matched=true
+ 
+pairs++
+document.getElementById("pairs").innerText=pairs
+ 
+if(pairs===8){
+document.getElementById("victory").style.display="flex"
+playVictorySound()
+}
+ 
+resetTurn()
+ 
+}else{
+ 
+setTimeout(()=>{
+ 
+first.setAttribute("animation",
+"property:rotation;to:0 0 0;dur:400")
+ 
+second.setAttribute("animation",
+"property:rotation;to:0 0 0;dur:400")
+ 
+resetTurn()
+ 
+},1000)
+ 
+}
+ 
+}
+
+function playVictorySound() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        
+        // Una alegre melodía de victoria ascendente de 6 notas
+        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 1046.50]; // Do, Mi, Sol, Do+, Mi+, Do++
+        const step = 0.12; // Tiempo en segundos entre cada nota
+        
+        notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            
+            // Usamos una onda sinusoidal pura para un tono claro y armónico
+            osc.type = "sine"; 
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * step));
+            
+            // Volumen inicial y desvanecimiento para evitar chasquidos de bocina
+            gainNode.gain.setValueAtTime(0, ctx.currentTime + (idx * step));
+            gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + (idx * step) + 0.02);
+            
+            // La última nota se prolonga más tiempo para el festejo
+            const noteDur = (idx === notes.length - 1) ? 1.2 : step * 1.5;
+            gainNode.gain.setValueAtTime(0.2, ctx.currentTime + (idx * step) + noteDur - 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (idx * step) + noteDur);
+            
+            osc.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            
+            osc.start(ctx.currentTime + (idx * step));
+            osc.stop(ctx.currentTime + (idx * step) + noteDur);
+        });
+    } catch(e) {
+        console.warn("La reproducción de sonido falló o requiere interacción directa:", e);
+    }
+}
+ 
+function resetTurn(){
+[first,second,lock]=[null,null,false]
+}
+ 
+createBoard()
+ 
+</script>
+ 
+</body>
+</html>
